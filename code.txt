@@ -1,0 +1,22 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['role'])) {
+    http_response_code(401);
+    exit("Unauthorized Access");
+}
+
+$requestedType = $_GET['type'] ?? 'user';
+$userRole = $_SESSION['role'];
+
+if ($requestedType === 'admin' && $userRole !== 'admin') {
+    http_response_code(403);
+    exit("Access Denied");
+}
+
+if ($requestedType === 'admin') {
+    include 'admin_report.php';
+} else {
+    include 'user_report.php';
+}
+?>
